@@ -79,7 +79,7 @@ function _map2(list, mapper){
 let nodeName = _map(document.querySelectorAll('*'), function(node){
      return node.nodename;
     }
-})
+)
 
 //내부 다형성.
 //함수 내의 보조함수(콜백)가 다형성을 책임진다. 
@@ -87,4 +87,66 @@ let nodeName = _map(document.querySelectorAll('*'), function(node){
 _map([1,2,3,4], function(v){
     return v + 10;
 })
+
+
+//curry 커링.
+function _curry(fn){
+    return function(a,b){
+        return arguments.length == 2 ? fn(a,b) : function(b){return fn(a,b)}
+    }
+}
+
+function _curryr(fn){
+    return function(a,b){
+        return arguments.length == 2 ? fn(a,b) : function(b){return fn(b,a)}
+    }
+}
+
+var _get = _curryr(function(obj, key){
+    return obj == null ? undefined : obj[key];
+})
+
+//_reduce : 재귀. 원 자료와 다른 새로운 자료 반환.
+var slice = Array.prototype.slice;
+function _rest(list, num){
+    return slice.call(list, num || 1);
+}
+function _reduce(list,iter,value){
+    if(arguments.length == 2){
+        value = list[0];
+        list = _rest(list);
+    }
+    _each(list, function(val){
+        value = iter(value, val)
+    })
+    return value
+}
+
+console.log(
+    _reduce([1,2,3], function(){
+        return a + b;
+    }, 0)
+)
+
+//파이프라인 만들기.
+//파이프 : 함수를 연속적으로 실행할수 있게 해줌. 보다 추상화된 레벨의 reduce.
+function _pipe(){
+    let fns = arguments;
+    return function(arg){
+        return _reduce(fns, function(arg, fn){
+            return fn(arg);
+        }, arg)
+    }
+}
+
+var p = _pipe(
+    function(a) { return a + 1 },
+    function(a) { return a * 2}
+); 
+
+//go : 즉시 실행되는 함수.
+function _go(){
+    let fns = _rest(arguments)
+    return _pipe.apply(null, fns)(arg);
+}
 
