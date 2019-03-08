@@ -42,8 +42,9 @@ let over30_name =_map(
 //_filter, _map 코드 중복 제거 & 디벨롭
 
 function _each(list, iter){
-    var keys = _keys(list); //배열이 아니어도 keys 가 뽑히게 되므로.
-    for(let i = 0; i < len = keys.length; i++){
+    let keys = _keys(list); //배열이 아니어도 keys 가 뽑히게 되므로.
+    let len = keys.length;
+    for(let i = 0; i < len; i++){
         iter(list[keys[i]]) //array 나 key value 나 루프가 가능함.
     }
     return list;
@@ -67,17 +68,17 @@ function _map2(list, mapper){
 
 //es6 의 map, filter 메서드. 객체 상태에 따라 결과가 달라짐. 다형성에 대한 어려움이 존재 
 
-[1,2,3,4].map(function(val){
-    return val * 2;
-})
+// [1,2,3,4].map(function(val){
+//     return val * 2;
+// })
 
-[1,2,3,4].filter(function(val){
-    return val % 2;
-})
+// [1,2,3,4].filter(function(val){
+//     return val % 2;
+// })
 
 //document.querySelectorAll('') 과 같은 유사배열일 경우, _map 의 함수에서라면 length 만큼 for 문을 돌기 때문에 결과가 나타날 수 있음.
 //데이터가 있기 전부터 함수가 존재하기 때문에. 객체 지향인 경우 해당 객체가 생겨야 기능을 수행할 수 있으나 함수 지향인 경우 데이터가 없더라도 평가 시점이 상대적으로 훨씬 유연해진다.
-let nodeName = _map(document.querySelectorAll('*'), function(node){
+let nodeName = _map2(document.querySelectorAll('*'), function(node){
      return node.nodename;
     }
 )
@@ -85,7 +86,7 @@ let nodeName = _map(document.querySelectorAll('*'), function(node){
 //내부 다형성.
 //함수 내의 보조함수(콜백)가 다형성을 책임진다. 
 
-_map([1,2,3,4], function(v){
+_map2([1,2,3,4], function(v){
     return v + 10;
 })
 
@@ -123,11 +124,11 @@ function _reduce(list,iter,value){
     return value
 }
 
-console.log(
-    _reduce([1,2,3], function(){
-        return a + b;
-    }, 0)
-)
+// console.log(
+//     _reduce([1,2,3], function(){
+//         return a + b;
+//     }, 0)
+// )
 
 //파이프라인 만들기.
 //파이프 : 함수를 연속적으로 실행할수 있게 해줌. 보다 추상화된 레벨의 reduce.
@@ -152,17 +153,17 @@ function _go(){
 }
 
 var _map = _curryr(_map),
-    _filter = _curryr(_filter);
+    _filter2 = _curryr(_filter2);
 
 
 //외부 다형성 높이기
 //null 을 넣어도 에러가 나지 않도록 변경.
 _each(null, console.log)
-_map(null, function(v) { return v })
-_filter(null, function(v) { return v })
+_map2(null, function(v) { return v })
+_filter2(null, function(v) { return v })
 _go(null,
-    _filter(function(v) {return v % 2}),
-    _map(function(v) {return v})
+    _filter2(function(v) {return v % 2}),
+    _map2(function(v) {return v}),
     console.log
 )
 
