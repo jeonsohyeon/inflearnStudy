@@ -42,8 +42,9 @@ let over30_name =_map(
 //_filter, _map 코드 중복 제거 & 디벨롭
 
 function _each(list, iter){
-    for(let i = 0; i <list.length; i++){
-        iter(list[i])
+    var keys = _keys(list); //배열이 아니어도 keys 가 뽑히게 되므로.
+    for(let i = 0; i < len = keys.length; i++){
+        iter(list[keys[i]]) //array 나 key value 나 루프가 가능함.
     }
     return list;
 }
@@ -150,3 +151,40 @@ function _go(){
     return _pipe.apply(null, fns)(arg);
 }
 
+var _map = _curryr(_map),
+    _filter = _curryr(_filter);
+
+
+//외부 다형성 높이기
+//null 을 넣어도 에러가 나지 않도록 변경.
+_each(null, console.log)
+_map(null, function(v) { return v })
+_filter(null, function(v) { return v })
+_go(null,
+    _filter(function(v) {return v % 2}),
+    _map(function(v) {return v})
+    console.log
+)
+
+//Object.keys 는 키를 뽑아주는데 배열을 넣어도 키를 뽑아주고, null 을 넣으면 에러가 난다.
+Object.keys({ name : 'ID', age : 33 })
+_keys(null);
+_keys([1,2,3,4]);
+
+function _is_object(obj){
+    return typeof obj == 'object' && !!obj;
+}
+function _keys(obj){
+    return _is_object(obj) ? Object.keys(obj) : [];
+}
+
+//array 가 아니면서 key value 상으로 루프를 돌만한 데이터 구성
+
+_each({
+    13 : 'i',
+    19 : 'd',
+    29 : 'id'
+}, function(name) {
+    console.log(name);
+}) 
+//이 객체에는 length 가 없으므로 아무런 일도 일어나지 않지만 _keys 를 _each 에 넣어 개선하면 정상적으로 동작하게 된다.
