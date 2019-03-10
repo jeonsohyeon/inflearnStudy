@@ -1,0 +1,10 @@
+html
+    head
+        meta(charset='utr-8')
+        title webapp test
+    body
+        h1 입력 결과
+        ul
+            each val in fileName
+                li
+                    a(href='/views/'+val)= val
