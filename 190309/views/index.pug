@@ -1,0 +1,17 @@
+html
+    head
+        meta(charset='utr-8')
+        title pug 템플릿 사용 테스트
+    body
+        h1 template pug example.
+        ul
+            -for(var i=0;i<5;i++)
+                li
+                    a(href='for') for문 테스트.
+        div= time
+        form(action='/form_receiver' method='post')
+            div
+                input(type='text' name='title')
+                input(type='submit')
+            div
+                textarea(name='description')
