@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "supervisor app_file.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,6 +13,7 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "pug-cli": "^1.0.0-alpha6",
+    "supervisor": "^0.12.0",
     "underscore": "^1.9.1"
   }
 }

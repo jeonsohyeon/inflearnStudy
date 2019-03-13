@@ -1,10 +1,16 @@
 html
-    head
-        meta(charset='utr-8')
-        title webapp test
-    body
-        h1 입력 결과
-        ul
-            each val in fileName
-                li
-                    a(href='/views/'+val)= val
+	head
+		meta(charset='utr-8')
+		title webapp test
+	body
+		h1 
+			a(href='/topic') list
+		ul
+			each val in fileName
+				li
+					a(href='/topic/'+val)= val
+		div
+			strong= title
+			p= description
+		div
+			a(href='/topic/new') 새로운 파일 만들기
