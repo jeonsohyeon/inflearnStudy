@@ -187,5 +187,5 @@ _each({
     29 : 'id'
 }, function(name) {
     console.log(name);
-}) 
+})
 //이 객체에는 length 가 없으므로 아무런 일도 일어나지 않지만 _keys 를 _each 에 넣어 개선하면 정상적으로 동작하게 된다.
