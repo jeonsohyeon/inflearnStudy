@@ -7,8 +7,8 @@ function _filter(list, predi){
 }
 function _map(list, mapper){
     var new_list = [];
-    _each(list, function(val){
-        new_list.push(mapper(val));
+    _each(list, function(val, key){
+        new_list.push(mapper(val, key));
     })
     return new_list;
 }
@@ -16,7 +16,7 @@ function _map(list, mapper){
 function _each(list, iter){
     var keys = _keys(list);
     for(var i=0; i< len = keys.length; i++){
-        iter(list[keys[i]])
+        iter(list[keys[i]], keys[i])
     }
     return list
 }
@@ -66,11 +66,11 @@ function _pipe(){
 function _go(){
     var fns = _rest(arguments)
     return _pipe.apply(null, fns)(arg)
-}
+} 
 
 var _map = _curryr(_map),
     _filter = curryr(_filter)
-
+    
 function _is_object(obj){
     return typeof obj == 'object' && !!obj;
 }
