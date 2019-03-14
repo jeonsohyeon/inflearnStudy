@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>컬렉션 중심 프로그래밍</title>
+	<script src="js/_.js"></script>
+</head>
+<body>
+<!--
+대표 함수로 만들 수 있는 특화함수 만들기.
+수집
+map values pluck
+거르기
+filter reject compact without
+찾아내기
+find some every
+접기
+reduce min max group_by count_by
+ -->
+<script>
+	var users = [
+		{ id : 1, name : 'ID', age : 36},
+		{ id : 2, name : 'ID2', age : 32},
+		{ id : 3, name : 'ID3', age : 32},
+		{ id : 4, name : 'ID4', age : 27},
+		{ id : 5, name : 'ID5', age : 25}
+	]
+
+//수집하기의 map으로 values, pluck 를 만들기.
+
+_map(users, function(user){
+	return user.name;
+})
+
+/*
+	키 밸류 상 오브젝트로 되어있는 경우 벨류를 꺼낸다.
+*/
+
+// function _values(data){
+// 	return _map(data, function(val){
+// 		return val
+// 	})
+// }
+
+console.log(
+users[0],
+_keys(users[0]),
+_values(users[0])
+)
+
+function _identity(val){
+	return val
+}
+
+//어디다 쓰나 의미가 없어보이지만
+var a = 10;
+_identity(a);
+
+//왜 필요할까요? 이 함수는 values 에 _identity 를 넣으면.
+function _values(data){
+	return _map(data, _identity)
+}
+
+var _values = _map(_identity); //이렇게도 만들수 있다.
+_map(_identity)(users[0]) //이렇게 하면 커링을 통해서 값을 뽑는다.
+
+
+//[33,22,11...] 처럼 배열 내부의 키로 꺼내진 값들을 수집하는 함수.
+// function _pluck(data, key){
+// 	return _map(data, function(obj){
+// 		return obj[key]
+// 	})
+// }
+// _pluck(users, 'age');
+
+function _pluck(data, key){
+	return _map(data, _get(key))
+}
+_pluck(users, 'age');
+//get을 통해서 좀더 쉽게.
+
+//filter 를 통해서 reject, compact 를 만듦.
+//reject는 true 가 나오는 애들을 제외 하는 것임.
+// function _reject(data, predi){
+// 	return _filter(data, function(val){
+// 		return !predi(val)
+// 	})
+// }
+
+_filter(users, function(user){
+	return user.age > 30;
+})
+_reject(users, function(user){
+	return user.age > 30;
+})
+var _reject = _curryr(function(data, predi){
+	return _filter(data, _negate(predi))
+})
+
+function _negate(func){
+	return function(val){
+		return !func(val);
+	}
+}
+//이렇게 간단히.
+var _compact = _filter(_identity) //아이덴티티에서 들어온 값이 그대로 리턴되기 때문에. 0, false, null 은 반환하지 않는다. _each 에서 true 로 평가되는 애들만 리턴.
+_compact([1,2,0, false, null, {}]) //여기서 숫자만 뽑을때..
+
+
+//찾아내기 find 를 만들기.
+//처음으로 predi true 일때 그 값을 꺼내는거임. _each 와 비슷함. _each 는 push 였지만 find 는 그 첫번째 값을 바로 반환하게 된다.
+//curryr 로 파이프라인이 가능하도록 만든다.
+
+var _find = _curryr(function(list, predi){ //나중에 지연평가 할때도 필요하게 된다. 
+	var keys = _keys(list);
+	for(var i = 0; len = keys.length; i<len; i++){
+		var val = list[keys[i]];
+		if(predi(val)) return val;
+	}
+});
+
+var _find_index = _curryr(function(list, predi){
+	var keys = _keys(list);
+	for(var i = 0; len = keys.length; i<len; i++){
+		if(predi(list[keys[i]])) return i;
+	}
+});
+
+_find(users, function(user){
+	return user.id == 20;
+});
+_find_index(users, function(user){
+	return user.id == 20;
+});
+
+_get(_find(users, function(user){
+	return user.id==50;
+}), 'name');
+
+
+//특정 조건 만족하는게 하나라도 있으면 true = some.
+//특정 조건 만족하는게 모두 있으면 true = every.
+
+function _some(data, predi){
+	predi = predi || _identity; //만약 predi 가 없으면 자기자신을 건넨다.
+	return _find_index(data, predi) != -1; //true 인덱스를 하나라도 찾게 되면 무조건 true를 반환한다. 
+
+}
+
+function _every(data, predi){
+	predi = predi || _identity; //만약 predi 가 없으면 자기자신을 건넨다.
+	return _find_index(data, _negate(predi)) == -1; //_negate 로 하나도 false 를 찾아내지 못했을때.
+}
+
+_some([1,2,5,10,20], function(val){
+	return val > 10
+})
+
+_every([1,2,5,10,20], function(val){
+	return val > 10
+})
+
+//접기, 축약의 reduce 를 사용해 min max group_by count_by 를 만듬
+//함수형 프로그래밍은 다 마찬가지지만 평가 순서와 상관없이 해당 결과를 낼 수 있도록. 앞에서부터 순서대로 들어온다고 생각하지 않고 결과가 제대로 나오도록 해야 한다.
+function _min(data){
+	return _reduce(data, function(a, b){
+		return a < b ? a : b
+	})
+}
+function _max(data){
+	return _reduce(data, function(a, b){
+		return a > b ? a : b
+	})
+}
+
+//min_by, max_by 어떤 조건을 통해서 할건지. 보조함수를 받기 때문에 다형성을 높여준다.
+var _min_by = _curryr(function(data, iter){
+	return _reduce(data, function(a, b){
+		return iter(a) < iter(b) ? a : b
+	})
+})
+var _max_by = _curryr(function(data, iter){
+	return _reduce(data, function(a, b){
+		return iter(a) > iter(b) ? a : b
+	})
+})
+
+_min_by([1,2,4,5,-4], Math.abs)
+_max_by([1,2,4,-15,-4], Math.abs)
+
+_max_by(users, function(user){
+	return user.age;
+})
+
+
+_go(users,
+	_filter(user => user.age >=30),
+	_min_by(_get('age'))
+)
+
+_go(users,
+	_reject(user => user.age >=30),
+	_min_by(_get('age'),
+	_get('name'))
+)
+
+//group_by는 특정 조건을 통해서 그룹을 지어주는 함수.
+
+function _push(obj, key, val){
+	(obj[key] = obj[key] || []).push(val);
+	return obj;
+}
+
+var _group_by = _curryr(function(data, iter){
+	return _reduce(data, function(grouped, val){
+		_push(grouped, iter(val), val)
+		// var key = iter(val);
+		// (grouped[key] = grouped[key] || []).push(val);
+		// return grouped; => 이부분을 push 함수에 위임.
+	}, {})
+})
+
+_group_by(users, function(user){
+	return user.age - user.age % 10 //10대, 20대 등으로 그룹핑.
+})
+
+var _head = function(list){
+	return list[0];
+}
+
+_go(users,
+	_group_by(_pipe(_get('name'), _head))
+)
+
+//count_by 는 이터레이트로 만들어낸 키가 몇개가 있는지 만들어내는 함수. 
+var _count_by = _curryr(function(data, iter){
+	return _reduce(data, function(count, val){
+		return _inc(count, iter(val))
+	}, {})
+})
+
+var _inc = function(count, key){
+	count[key] ? count[key]++ : count[key]=1
+	return count;
+}
+
+_count_by(users, function(user){
+	return user.age
+})
+
+var pairs = _map(function(val, key){
+	return [key, val]
+})
+//var pairs = _map((val, key) => [key, val])
+
+console.clear()
+
+//each, map 을 key 를 추가한 결과로 맵으로 새로운 배열을 반환할 수도 있다.
+var _f1 = _pipe(
+	_count_by(function(user){
+		return user.age
+	}),
+	_map((count, key) => `<li>${key}... ${count}</li>`),
+	list => '<ul>'+list.join('')+'</ul>',
+	document.write.bind(document)
+)
+
+
+var _f2 = (
+	users,
+	_filter(user => user.age < 20),
+	f1
+)
+//이런식으로 새로운 함수를 계속 조합해서 만들어나갈 수 있다..
+
+
+
+</script>
+</body>
+</html>
