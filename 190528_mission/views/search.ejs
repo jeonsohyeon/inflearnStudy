@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+</head>
+<body>
+<form action="/search" method="post">
+search Word : <input type="text" name="word" class="input-value"/>
+submit : <input type="submit"/>
+</form>
+
+<button type="button" class="search-word">검색어 AJAX</button>
+<div class="result-box"></div>
+
+<script>
+document.querySelector('.search-word').addEventListener('click', function(){
+	var value11 = document.querySelector('.input-value').value;
+	ajaxTest('http://127.0.0.1:3000/ajax_search', value11);
+})
+
+function ajaxTest(url, data){
+	var data = {'word' : data};
+	data = JSON.stringify(data);
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', url);
+	xhr.setRequestHeader('Content-Type', "application/json");
+	xhr.send(data);
+	xhr.addEventListener('load', function(){
+		var result = JSON.parse(xhr.responseText);
+		document.querySelector('.result-box').innerHTML = result.word;
+	})
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+</head>
+<body>
+<form action="/email_post" method="post">
+	email : <input type="text" name="email" class="value"/>
+	submit : <input type="submit"/>
+</form>
+
+<button class="ajaxTest">ajax Text</button>
+<div class="result"></div>
+
+<script>
+	document.querySelector('.ajaxTest').addEventListener('click', function(){
+		var inputData = document.querySelector('.value').value;
+		sendAjax('http://127.0.0.1:3000/ajax_send_email', inputData)
+	})
+
+	function sendAjax(url, data){
+		var data = {'email' : data};
+		data = JSON.stringify(data);
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', url)
+		xhr.setRequestHeader('Content-Type', "application/json"); //json format send.
+		xhr.send(data);
+		xhr.addEventListener('load', function(){
+			var rr = JSON.parse(xhr.responseText);
+			if(rr.result !== "ok") return;
+			document.querySelector('.result').innerHTML = rr.email;
+		})
+	}
+
+</script>
+</body>
+</html>
