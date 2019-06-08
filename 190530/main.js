@@ -6,6 +6,24 @@ var template = require('./lib/template.js');
 var path = require('path'); //입력 정보에 대한 보안
 var sanitizeHTML = require('sanitize-html'); //출력 정보에 대한 보안
 
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  database : 'opentutorials'
+});
+  
+connection.connect();
+  
+connection.query('SELECT * FROM topic', function (error, results, fields) {
+    if (error) {
+        console.log(error); 
+    }
+    console.log(results);
+});
+  
+connection.end();
+
 var app = http.createServer(function(request,response){
     var _url = request.url; //쿼리스트링의 값이 전달됨
     var queryData = url.parse(_url, true).query; //쿼리 데이터를 가져오기.
