@@ -1,0 +1,27 @@
+<form action="/email/form" method="post">
+  <input type="text" name="email" />
+  <input type="submit" />
+</form>
+<button class="ajaxsend">AJAX SEND</button>
+<div class="result"></div>
+<div class="result_name"></div>
+<script>
+  document.querySelector('.ajaxsend').addEventListener('click', function() {
+    var value = document.forms[0].elements[0].value;
+    sendAjax('http://localhost:3000/email/ajax', value);
+  });
+  function sendAjax(url, data) {
+    var data = { email: data };
+    data = JSON.stringify(data);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.send(data);
+    xhr.addEventListener('load', function() {
+      var result = JSON.parse(xhr.responseText);
+      console.log(result);
+      document.querySelector('.result').innerHTML = result.email;
+      document.querySelector('.result_name').innerHTML = result.name;
+    });
+  }
+</script>
