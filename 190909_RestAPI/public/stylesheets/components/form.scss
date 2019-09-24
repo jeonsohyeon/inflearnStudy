@@ -1,0 +1,24 @@
+/* basic field, :focus, :disabled, !confirm, !fail, !error
+select, textarea, radio, checkbox, file
+*/
+button {
+  display: inline-block;
+  border: 1px solid #42b983;
+  border-radius: 2em;
+  color: #42b983;
+  font-size: 16px;
+  line-height: 40px;
+  padding: 0 10px;
+  text-align: center;
+  transition: background 0.5s, color 0.5s;
+  &:hover,
+  &:focus {
+    background-color: #42b983;
+    color: #fff;
+  }
+  &:disabled {
+    border-color: #7f8c8d;
+    background-color: #7f8c8d;
+    color: #000;
+  }
+}

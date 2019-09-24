@@ -1,0 +1,183 @@
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  font-size: 12px;
+  line-height: 1.4;
+  font-family: 'Noto Sans KR', 'Nanum Gothic', 'dotum', sans-serif;
+  word-break: break-word;
+  word-wrap: break-word;
+  word-break: keep-all;
+}
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+form,
+fieldset,
+input,
+textarea,
+blockquote,
+th,
+td,
+p {
+  margin: 0px;
+  padding: 0px;
+  -webkit-text-size-adjust: none;
+}
+table {
+  border-collapse: collapse;
+}
+fieldset,
+img,
+abbr,
+acronym {
+  border: 0px;
+}
+legend {
+  position: absolute;
+  *margin-left: -7px;
+  height: 0;
+  line-height: 0;
+  font-size: 0;
+  overflow: hidden;
+}
+address,
+caption,
+cite,
+code,
+dfn,
+em,
+var {
+  font-style: normal;
+  font-weight: normal;
+}
+ol,
+ul {
+  list-style: none;
+}
+caption {
+  height: 0;
+  line-height: 0;
+  font-size: 0;
+  overflow: hidden;
+  text-indent: -10000px;
+}
+q:before,
+q:after {
+  content: '';
+}
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+button {
+  padding: 0;
+  border: 0 none;
+  background: none;
+}
+header,
+footer,
+article,
+section,
+aside,
+details,
+figure,
+figcaption,
+nav,
+hgroup {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+audio[controls],
+canvas,
+video {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+button,
+input,
+select,
+textarea {
+  margin: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  *vertical-align: middle;
+}
+button,
+input {
+  line-height: normal;
+  *overflow: visible;
+}
+table button,
+table input {
+  *overflow: auto;
+}
+button,
+html input[type='button'],
+input[type='reset'],
+input[type='submit'] {
+  cursor: pointer;
+  -webkit-appearance: button;
+}
+input[type='checkbox'],
+input[type='radio'] {
+  box-sizing: border-box;
+}
+input[type='search'] {
+  -webkit-appearance: textfield;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+input[type='search']::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+textarea {
+  overflow: auto;
+  vertical-align: top;
+}
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  outline: none;
+  border: none;
+}
+input::-webkit-contacts-auto-fill-button {
+  visibility: hidden;
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+input::-ms-clear,
+select::-ms-expand,
+textarea::-webkit-scrollbar {
+  display: none;
+  -ms-overflow-style: none;
+}
+input:invalid,
+input:-moz-submit-invalid,
+input:-moz-ui-invalid {
+  box-shadow: none;
+}

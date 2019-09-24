@@ -1,0 +1,41 @@
+<% include ./inc/head %>
+<main class="md">
+  <h1><%= title %></h1>
+  <h2>Demo</h2>
+  <a href="/">데모 링크</a>
+  <h2>Feature</h2>
+  <ul>
+    <li>하루 이전 날짜 기준으로 데일리 박스오피스 1~10위 까지 노출</li>
+    <li>영화 제목 클릭 시, 감독 및 배우 상세 정보 제공</li>
+    <li>감독/배우 링크를 클릭시, 해당 이름을 키워드로 하는 유투브 5건 노출</li>
+  </ul>
+  <h2>Tool</h2>
+  <ul>
+    <li>Express.js + node-sass-middleware</li>
+    <li>영화진흥위원회 Api</li>
+    <li>Youtube 검색 Api</li>
+  </ul>
+  <h2>Code Detail</h2>
+  <strong>비동기 통신 : fetchURL(url, callback)</strong>
+  <ul>
+    <li>GET 방식으로 호출한다.</li>
+    <li>ajax 대신 fetch 를 사용했고, 매개변수로 url 과 callback 을 받을 수 있는 함수를 만들어 재사용이 가능하게 함</li>
+  </ul>
+  <strong>영화 Api 호출 : findRank</strong>
+  <ul>
+    <li>fetchURL로 호출된 데이터를 받아서 렌더링한다.</li>
+    <li>영화 상세정보를 출력하기 위한 파라미터를 제목에 데이터 속성으로 추가한다. (moviecd)</li>
+    <li>만약 신규진입일 경우 신규진입이라는 글자를 추가 노출한다.</li>
+  </ul>
+  <strong>영화 상세정보 Api 호출 : findInfo</strong>
+  <ul>
+    <li>영화 제목 클릭 시 제목에 있는 데이터 속성(moviecd)을 기준으로 감독, 배우 정보를 불러온다.</li>
+    <li>감독, 배우는 배열로 받아오므로 for 문으로 데이터를 재가공한다.</li>
+  </ul>
+  <strong>유투브 검색 Api 호출 : searchYoutube, findYoutube</strong>
+  <ul>
+    <li>searchYoutube : 검색 키워드를 받아, 지정된 형식에 맞추어 요청 url을 생성해서 fetchURL의 첫번째 매개변수로 보내고, 콜백으로 findYoutube를 호출한다.</li>
+    <li>findYoutube : 검색결과를 받아 렌더링한다.</li>
+  </ul>
+</main>
+<% include ./inc/footer %>
