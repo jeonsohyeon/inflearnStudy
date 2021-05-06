@@ -12,6 +12,6 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "pug-cli": "^1.0.0-alpha6",
-    "underscore": "^1.9.1"
+    "underscore": "^1.12.1"
   }
 }
